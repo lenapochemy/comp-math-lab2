@@ -13,10 +13,7 @@ import java.util.Map;
 
 public class Chart {
 
-//    private
-
     public Chart(){
-
     }
 
     public void draw(String methodName, Map<Double, Double> map){

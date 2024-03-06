@@ -8,7 +8,6 @@ import methods.SimpleIterationMethod;
 import java.io.*;
 import java.util.*;
 import java.util.function.DoubleFunction;
-import java.util.function.Function;
 
 public class ScannerManager {
     private Scanner scanner;
@@ -55,7 +54,7 @@ public class ScannerManager {
         boolean flag = false;
         while(!flag) {
             try {
-                System.out.println("Результаты вывести на экран или в записать в файл? (s/f)");
+                System.out.print("Результаты вывести на экран или в записать в файл? (s/f)");
                 String ans = scanner.nextLine().trim();
                 switch (ans) {
                     case "" ->
@@ -146,11 +145,6 @@ public class ScannerManager {
         }
         return null;
     }
-
-//    public GaussSeidelMethod saySLAE(){
-//        int n = sayN();
-//        return new GaussSeidelMethod(n, sayMatrix(n), sayBi(n),sayEpsilon(),  sayM());
-//    }
 
     public int sayFunctionNumber(String[] functionStrings){
         int n = functionStrings.length;
@@ -283,57 +277,18 @@ public class ScannerManager {
         return num;
     }
 
-//    public double sayA(){
-//        double num = 0;
-//        String sNum;
-//        boolean flag = true;
-//        while (flag){
-//            try {
-//                System.out.print("Введите значение левой границы интервала: ");
-//                sNum = scanner.nextLine().trim();
-//                if(fileMode) System.out.println(sNum);
-//                if(sNum.isEmpty()) throw new NullPointerException();
-//                num = Double.parseDouble(sNum);
-//                flag = false;
-//            } catch (NullPointerException e){
-//                System.out.println("Значение границы не может быть пустым");
-//                if(fileMode) errorEnd();
-//            }  catch (NumberFormatException e){
-//                System.out.println("Значение границы должно быть числом");
-//                if(fileMode) errorEnd();
-//            } catch (NoSuchElementException e){
-//                System.out.println("Данные не найдены в файле");
-//                System.exit(0);
-//            }
-//        }
-//        return num;
-//    }
-//
-//    public double sayB() {
-//        double num = 0;
-//        String sNum;
-//        boolean flag = true;
-//        while (flag){
-//            try {
-//                System.out.print("Введите значение правой границы интервала: ");
-//                sNum = scanner.nextLine().trim();
-//                if(fileMode) System.out.println(sNum);
-//                if(sNum.isEmpty()) throw new NullPointerException();
-//                num = Double.parseDouble(sNum);
-//                flag = false;
-//            } catch (NullPointerException e){
-//                System.out.println("Значение границы не может быть пустым");
-//                if(fileMode) errorEnd();
-//            } catch (NumberFormatException e){
-//                System.out.println("Значение границы должно быть числом");
-//                if(fileMode) errorEnd();
-//            } catch (NoSuchElementException e){
-//                System.out.println("Данные не найдены в файле");
-//                System.exit(0);
-//            }
-//        }
-//        return num;
-//    }
+    public double sayA(){
+        return sayDoubleNumber("левой границы интервала");
+    }
+
+    public double sayB(double a) {
+        double b = a;
+        while(b <= a) {
+            b = sayDoubleNumber("правой границы интервала");
+            if(b <= a) System.out.println("Значение правой границы интервала должно быть больше левой");
+        }
+        return b;
+    }
 
     public double sayDoubleNumber(String name){
         double num = 0;

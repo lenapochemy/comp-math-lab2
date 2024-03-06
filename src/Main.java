@@ -1,8 +1,6 @@
 import methods.AbstractMethod;
 import methods.SystemNewtonMethod;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -50,6 +48,7 @@ public class Main {
             double eps = scannerManager.sayEpsilon();
 
             String result;
+            boolean outputMode;
             if(systemMode){
                 double x_0 = scannerManager.sayDoubleNumber("начальное приближение для переменной x");
                 double y_0 = scannerManager.sayDoubleNumber("начальное приближение для переменной y");
@@ -66,10 +65,14 @@ public class Main {
                     default -> method = new SystemNewtonMethod(f3x, f3y, eps, x_0, y_0, num);
                 }
 
-                result = method.solve();
+                method.setSolveMode(scannerManager.saySolveMode());
+                outputMode = scannerManager.sayOutputMode();
+                method.setOutputMode(outputMode);
+                if(!outputMode) method.setFile(scannerManager.sayFileToWrite());
+                method.solve();
             } else {
-                double a = scannerManager.sayDoubleNumber("левой границы интервала");
-                double b = scannerManager.sayDoubleNumber("правой границы интервала");
+                double a = scannerManager.sayA();
+                double b = scannerManager.sayB(a);
                 AbstractMethod method = scannerManager.sayMethod(map.get(num), eps, a, b);
 
 
@@ -77,23 +80,13 @@ public class Main {
                     System.out.println("На данном интервале несколько корней или они отсутствуют");
                     System.exit(0);
                 }
-//                method.setSolveMode(scannerManager.saySolveMode());
-                result = method.solve();
+                method.setSolveMode(scannerManager.saySolveMode());
+                outputMode = scannerManager.sayOutputMode();
+                method.setOutputMode(outputMode);
+                if(!outputMode) method.setFile(scannerManager.sayFileToWrite());
+                method.solve();
+
             }
-
-            if (scannerManager.sayOutputMode()) {
-                System.out.println(result);
-            } else {
-                FileWriter writer = scannerManager.sayFileToWrite();
-                try {
-                    writer.write(result);
-                    writer.close();
-                } catch (IOException e) {
-                    System.out.println("Проблемы с файлом");
-                }
-            }
-
-
 //        C:\Users\Elena\IdeaProjects\compMath\lab2\src\files\file1
     }
 }

@@ -9,7 +9,7 @@ public class MethodHalfDivision extends AbstractMethod {
     }
     private double x, f_a, f_b, f_x;
     @Override
-    public String solve(){
+    public void solve(){
         drawGraph();
         iterationNumber = 0;
         while (!checkEndConditional()){
@@ -17,12 +17,12 @@ public class MethodHalfDivision extends AbstractMethod {
             f_a = function.apply(a);
             f_b = function.apply(b);
             f_x = function.apply(x);
-//            System.out.println(a + " " + f_a + " " + b + " " + f_b + " " + x + " " + f_x);
             if(f_a * f_x < 0) {
                 b = x;
             } else if(f_x * f_b < 0){
                 a = x;
             }
+            writeIteration( "Итерация " + iterationNumber + "\nНовое приближение: a = " + a + " b = " + b + "\n--------------------------\n");
             iterationNumber++;
         }
 
@@ -30,8 +30,8 @@ public class MethodHalfDivision extends AbstractMethod {
             x = a;
         } else x = b;
 
-        return  "Найденный корень: " + x + "\nЗначение функции в корне: " + function.apply(x) +
-                "\nЧисло итераций: " + iterationNumber;
+        writeResult( "Найденный корень: " + x + "\nЗначение функции в корне: " + function.apply(x) +
+                "\nЧисло итераций: " + iterationNumber);
 
     }
 
@@ -39,7 +39,6 @@ public class MethodHalfDivision extends AbstractMethod {
     //вернет true, если условие окончания выполняется и это последняя итерация
     @Override
     public boolean checkEndConditional(){
-//        System.out.println("aaa " + Math.abs(a - b));
         return Math.abs(a - b) < eps ;
     }
 

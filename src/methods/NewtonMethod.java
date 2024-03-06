@@ -8,29 +8,28 @@ public class NewtonMethod extends AbstractMethod {
         super(function, eps, a, b, "Метод Ньютона");
     }
     @Override
-    public String solve(){
+    public void solve(){
         drawGraph();
         //выбор начальногоо приближения
         x_i = chooseFirstApproximation();
+        writeIteration("Первое приближение: " + x_i + "\n--------------------------\n");
 
         iterationNumber = 0;
         x_i_next = x_i - ( function.apply(x_i) / derive_function.apply(x_i) );
-//        System.out.println(x_i + " " + function.apply(x_i) + " " + x_i_next + " " + function.apply(x_i_next));
         do {
             x_i = x_i_next;
             x_i_next = x_i - ( function.apply(x_i) / derive_function.apply(x_i) );
+            writeIteration( "Итерация " + iterationNumber + "\nНовое приближение: " + x_i_next + "\n--------------------------\n");
             iterationNumber++;
-//            System.out.println(x_i + " " + function.apply(x_i) + " " + x_i_next + " " + function.apply(x_i_next));
         } while (!checkEndConditional());
 
-        return  "Найденный корень: " + x_i_next + "\nЗначение функции в корне: " + function.apply(x_i_next) +
-                "\nЧисло итераций: " + iterationNumber;
+        writeResult( "Найденный корень: " + x_i_next + "\nЗначение функции в корне: " + function.apply(x_i_next) +
+                "\nЧисло итераций: " + iterationNumber);
     }
 
     //вернет true, если условие окончания выполняется и это последняя итерация
     @Override
     public boolean checkEndConditional(){
-//        System.out.println("aaa " + Math.abs(x_i_next - x_i));
         return Math.abs(x_i_next - x_i) < eps;
     }
 }

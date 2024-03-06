@@ -2,6 +2,8 @@ package methods;
 
 import chart.Chart;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.DoubleFunction;
@@ -15,6 +17,7 @@ public abstract class AbstractMethod {
     int iterationNumber;
     boolean solveMode, outputMode;
     private final String name;
+    public FileWriter file;
     public AbstractMethod(DoubleFunction<Double> function, double eps, double a, double b, String name){
         this.function = function;
         this.eps = eps;
@@ -43,7 +46,10 @@ public abstract class AbstractMethod {
     public void setOutputMode(boolean outputMode){
         this.outputMode = outputMode;
     }
-    public abstract String solve();
+    public void setFile(FileWriter file){
+        this.file = file;
+    }
+    public abstract void solve();
     public abstract boolean checkEndConditional();
 
     public double chooseFirstApproximation(){
@@ -60,11 +66,37 @@ public abstract class AbstractMethod {
 
     // вернет true если на промежутке только один корень
     public boolean checkRootCount(){
-//        System.out.println(a + " " + function.apply(a) + " " + b + " " + function.apply(b));
         if(function.apply(a) * function.apply(b) > 0) return false;
 //        if(derive_function.apply(a) * derive_function.apply(b) < 0) return false;
         return true;
+    }
 
+    public void writeIteration(String string){
+        if(solveMode){
+            if(outputMode){
+                System.out.println(string);
+            } else {
+                try {
+                    file.write(string);
+//                    file.close();
+                } catch (IOException e){
+                    System.out.println("Проблемы с файлом");
+                }
+            }
+        }
+    }
+
+    public void writeResult(String string){
+        if(outputMode){
+            System.out.println(string);
+        } else {
+            try {
+                file.write(string);
+                file.close();
+            } catch (IOException e){
+                System.out.println("Проблемы с файлом");
+            }
+        }
     }
 
 }
