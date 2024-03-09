@@ -5,13 +5,13 @@ import java.util.function.DoubleFunction;
 public class NewtonMethod extends AbstractMethod {
 
     public NewtonMethod(DoubleFunction<Double> function, double eps, double a, double b){
-        super(function, eps, a, b, "Метод Ньютона");
+        super(function, eps, a, b);
     }
     @Override
     public void solve(){
-        drawGraph();
         //выбор начальногоо приближения
         x_i = chooseFirstApproximation();
+//        x_i = b;
         writeIteration("Первое приближение: " + x_i + "\n--------------------------\n");
 
         iterationNumber = 0;

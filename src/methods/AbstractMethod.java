@@ -1,11 +1,7 @@
 package methods;
 
-import chart.Chart;
-
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.DoubleFunction;
 
 public abstract class AbstractMethod {
@@ -16,24 +12,13 @@ public abstract class AbstractMethod {
     DoubleFunction<Double> function, derive_function;
     int iterationNumber;
     boolean solveMode, outputMode;
-    private final String name;
     public FileWriter file;
-    public AbstractMethod(DoubleFunction<Double> function, double eps, double a, double b, String name){
+    public AbstractMethod(DoubleFunction<Double> function, double eps, double a, double b){
         this.function = function;
         this.eps = eps;
         this.a = a;
         this.b = b;
         this.derive_function = derive(function);
-        this.name = name;
-    }
-    public void drawGraph(){
-        Map<Double, Double> map = new HashMap<>();
-        for(double i = a - 0.2; i <= b + 0.2; i += 0.1){
-            double f = function.apply(i);
-            map.put(i, f);
-        }
-        Chart chart = new Chart();
-        chart.draw(name, map);
     }
     public DoubleFunction<Double> derive(DoubleFunction<Double> f){
         double dx = 0.0001;
@@ -56,18 +41,22 @@ public abstract class AbstractMethod {
         DoubleFunction<Double> second_derive = derive(derive_function);
         if(function.apply(a) * second_derive.apply(a) > 0) {
             return a;
-        }
-        if(function.apply(b) * second_derive.apply(b) > 0){
-            return b;
-        }
-        return a;
+        } else return b;
+//        if(function.apply(b) * second_derive.apply(b) > 0){
+//            return b;
+//        }
+//        return a;
     }
 
 
     // вернет true если на промежутке только один корень
-    public boolean checkRootCount(){
+    public static boolean checkRootCount(DoubleFunction<Double> function, double a, double b){
         if(function.apply(a) * function.apply(b) > 0) return false;
-//        if(derive_function.apply(a) * derive_function.apply(b) < 0) return false;
+        int count = 0;
+        for (double i = a; i <= b -0.1; i += 0.1){
+            if(function.apply(i) * function.apply(i+0.1) < 0) count++;
+            if(count > 1) return false;
+        }
         return true;
     }
 
@@ -78,7 +67,6 @@ public abstract class AbstractMethod {
             } else {
                 try {
                     file.write(string);
-//                    file.close();
                 } catch (IOException e){
                     System.out.println("Проблемы с файлом");
                 }

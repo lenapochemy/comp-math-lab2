@@ -1,7 +1,7 @@
 import exceptions.FileException;
 import exceptions.IncorrectValueException;
 import methods.AbstractMethod;
-import methods.MethodHalfDivision;
+import methods.HalfDivisionMethod;
 import methods.NewtonMethod;
 import methods.SimpleIterationMethod;
 
@@ -123,7 +123,7 @@ public class ScannerManager {
                             throw new NullPointerException();
                     case "d" -> {
                         flag = true;
-                        return new MethodHalfDivision(function, eps, a, b);
+                        return new HalfDivisionMethod(function, eps, a, b);
                     }
                     case "n" -> {
                         flag = true;

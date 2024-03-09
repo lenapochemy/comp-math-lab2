@@ -1,3 +1,4 @@
+import chart.Chart;
 import methods.AbstractMethod;
 import methods.SystemNewtonMethod;
 
@@ -21,8 +22,8 @@ public class Main {
                     "x³-x+4=0",
                     "x³-4.5x²-9.21x-0.383=0",
                     "x*sin(x)+2x-3=0",
-                    "x³+2x²-4x",
-                    "ln(x²)-x+10"
+                    "x³+2x²-4x=0",
+                    "ln(x²)-x+10=0"
             };
             map.put(1, x -> x * x * x - x + 4);
             map.put(2, x -> x * x * x - 4.5 * x * x - 9.21 * x - 0.383);
@@ -47,9 +48,9 @@ public class Main {
             }
             double eps = scannerManager.sayEpsilon();
 
-            String result;
             boolean outputMode;
             if(systemMode){
+                Chart.drawForSystem(num);
                 double x_0 = scannerManager.sayDoubleNumber("начальное приближение для переменной x");
                 double y_0 = scannerManager.sayDoubleNumber("начальное приближение для переменной y");
                 BiFunction<Double, Double, Double> f1x = (x, y) -> (x * x + y * y -4),
@@ -60,9 +61,9 @@ public class Main {
                         f3y = (x, y) -> (y + x * x * x - 10);
                 SystemNewtonMethod method;
                 switch (num) {
-                    case 1 -> method = new SystemNewtonMethod(f1x, f1y, eps, x_0, y_0, num);
-                    case 2 -> method = new SystemNewtonMethod(f2x, f2y, eps, x_0, y_0, num);
-                    default -> method = new SystemNewtonMethod(f3x, f3y, eps, x_0, y_0, num);
+                    case 1 -> method = new SystemNewtonMethod(f1x, f1y, eps, x_0, y_0);
+                    case 2 -> method = new SystemNewtonMethod(f2x, f2y, eps, x_0, y_0);
+                    default -> method = new SystemNewtonMethod(f3x, f3y, eps, x_0, y_0);
                 }
 
                 method.setSolveMode(scannerManager.saySolveMode());
@@ -71,22 +72,22 @@ public class Main {
                 if(!outputMode) method.setFile(scannerManager.sayFileToWrite());
                 method.solve();
             } else {
+                Chart.drawGraph(map, num);
                 double a = scannerManager.sayA();
                 double b = scannerManager.sayB(a);
+                while (!AbstractMethod.checkRootCount(map.get(num) ,a , b)) {
+                    System.out.println("На данном интервале несколько корней или они отсутствуют, выберите другой интервал");
+                    a = scannerManager.sayA();
+                    b = scannerManager.sayB(a);
+//                    System.exit(0);
+                }
                 AbstractMethod method = scannerManager.sayMethod(map.get(num), eps, a, b);
 
-
-                if (!method.checkRootCount()) {
-                    System.out.println("На данном интервале несколько корней или они отсутствуют");
-                    System.exit(0);
-                }
                 method.setSolveMode(scannerManager.saySolveMode());
                 outputMode = scannerManager.sayOutputMode();
                 method.setOutputMode(outputMode);
                 if(!outputMode) method.setFile(scannerManager.sayFileToWrite());
                 method.solve();
-
             }
-//        C:\Users\Elena\IdeaProjects\compMath\lab2\src\files\file1
     }
 }

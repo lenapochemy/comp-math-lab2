@@ -4,7 +4,7 @@ import java.util.function.DoubleFunction;
 
 public class SimpleIterationMethod extends AbstractMethod {
     public SimpleIterationMethod(DoubleFunction<Double> f, double eps, double a, double b){
-        super(f, eps, a, b, "Метод простой итерации");
+        super(f, eps, a, b);
     }
     private double lambda = 0;
     @Override
@@ -22,12 +22,11 @@ public class SimpleIterationMethod extends AbstractMethod {
         DoubleFunction<Double> derive_fi = derive(fi_function);
 
         //проверка условия сходимости
+        writeIteration("\n--------------------------\n" + "Значение производной на границах: fi'(a) = " + derive_fi.apply(a) + " fi'(b) = " + derive_fi.apply(b));
         if(Math.abs(derive_fi.apply(a)) > 1 || Math.abs(derive_fi.apply(b)) > 1){
             writeIteration("Достаточное условие сходимости метода простой итерации на данном интервале не выполнено" + "\n--------------------------\n");
             System.exit(0);
         } else writeIteration("Достаточное условие сходимости выполнено" + "\n--------------------------\n");
-
-        drawGraph();
 
         // первое приближение
         x_i = chooseFirstApproximation();
@@ -49,6 +48,6 @@ public class SimpleIterationMethod extends AbstractMethod {
     //вернет true, если условие окончания выполняется и это последняя итерация
     @Override
     public boolean checkEndConditional(){
-        return Math.abs(x_i_next - x_i) < eps;
+        return Math.abs(x_i_next - x_i) < eps && Math.abs(function.apply(x_i_next))<eps;
     }
 }

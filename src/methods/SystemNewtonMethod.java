@@ -1,25 +1,19 @@
 package methods;
 
-import chart.Chart;
-
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiFunction;
 
 
 public class SystemNewtonMethod {
 
     public SystemNewtonMethod(BiFunction<Double, Double, Double> func1, BiFunction<Double, Double, Double> func2,
-                              double eps, double x_0, double y_0, int num){
+                              double eps, double x_0, double y_0){
         this.func1 = func1;
         this.func2 = func2;
         this.eps = eps;
         this.x_0 = x_0;
         this.y_0 = y_0;
-        this.num = num;
     }
 
     private final BiFunction<Double, Double, Double> func1, func2;
@@ -27,7 +21,6 @@ public class SystemNewtonMethod {
 
     private final double eps, x_0, y_0;
     private double dx, dy, x_k, y_k, x_k_next, y_k_next;
-    private final int num;
     private FileWriter file;
     public void setFile(FileWriter file){
         this.file = file;
@@ -51,8 +44,6 @@ public class SystemNewtonMethod {
     }
 
     public void solve(){
-        draw();
-
         BiFunction<Double, Double, Double> df1_dx = partialDeriveX(func1);
         BiFunction<Double, Double, Double> df2_dx = partialDeriveX(func2);
         BiFunction<Double, Double, Double> df1_dy = partialDeriveY(func1);
@@ -119,62 +110,10 @@ public class SystemNewtonMethod {
             } else {
                 try {
                     file.write(string);
-//                    file.close();
                 } catch (IOException e){
                     System.out.println("Проблемы с файлом");
                 }
             }
         }
     }
-    public void draw(){
-
-        switch (num){
-            case 1 -> {
-                double[] x1 = new double[41];
-                double[] y1 = new double[41];
-                double[] x2 = new double[41];
-                double[] y2 = new double[41];
-                double[] x3 = new double[41];
-                double[] y3 = new double[41];
-                int j = 0;
-                for(double i = -2.0; i < 2.1; i+=0.1, j++){
-                    x1[j] = i;
-                    y1[j] = 2 * i * i;
-                    x2[j] = i;
-                    x3[j] = i;
-                    y2[j] = Math.sqrt(4 - i * i);
-                    y3[j] = 0 - Math.sqrt(4 - i * i);
-                }
-                y2[40] = 0.0;
-                y3[40] = 0.0;
-                Chart chart = new Chart();
-                chart.drawGraphics(x1, y1, x2, y2, x3, y3, "aaa");
-            }
-            case 2 -> {
-                Map<Double, Double> map1 = new HashMap<>();
-                Map<Double, Double> map2 = new HashMap<>();
-                int j = 0;
-                for(double i = -2.0; i < 2.1; i+=0.1, j++){
-                    if(i >= -1.4 && i<= 0.6) {
-                        map1.put(i, Math.asin(-0.4 - i));
-                    }
-                    map2.put(i, Math.cos(i+1) / 2);
-                }
-                Chart chart = new Chart();
-                chart.drawTwoGraphics(map1, map2, "Метод Ньютона");
-            }
-            default -> {
-                Map<Double, Double> map1 = new HashMap<>();
-                Map<Double, Double> map2 = new HashMap<>();
-                int j = 0;
-                for(double i = 0.0; i < 4.1; i+=0.1, j++){
-                    map1.put(i, 0 - i - i * i);
-                    map2.put(i, 10 - i * i *i);
-                }
-                Chart chart = new Chart();
-                chart.drawTwoGraphics(map1, map2, "Метод Ньютона");
-            }
-        }
-    }
-
 }
